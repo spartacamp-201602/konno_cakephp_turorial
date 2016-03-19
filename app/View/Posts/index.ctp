@@ -1,6 +1,15 @@
 <h2>Blog Posts</h2>
 
 <!-- <?php debug($posts) ?> -->
+<?php
+echo $this->html->link(
+    '新規記事を書く',
+    array(
+        'controller' => 'posts',
+        'action' => 'add'
+    )
+);
+?>
 
 <table>
     <tr>
@@ -9,7 +18,6 @@
         <th>操作</th>
         <th>投稿日</th>
     </tr>
-
     <?php foreach ($posts as $post) : ?>
     <tr>
         <td><?php echo $post['Post']['id']; ?></td>
