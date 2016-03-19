@@ -6,13 +6,17 @@
 // アクション ... XXXXXControllerの中に定義されている
 class PostsController extends AppController {
 
+    // 使用するヘルパーの記述
     public $helpers = array('Html', 'Form');
+
+    // 使用するコンポーネントの記述
+    public $components = array('Flash');
 
     public function index() {
         // $this->setすることによって
         // Viewの中で下記のように変数が使えるようになる。
         /* <?php echo $posts ?> */
-        $options = array('limit' => 3);
+        $options = array('limit' => 100);
         $this->set('posts', $this->Post->find('all', $options));
     }
 
@@ -24,5 +28,30 @@ class PostsController extends AppController {
         $post = $this->Post->findById($id);
         // View側で使えるように結果をセットする
         $this->set('post', $post);
+    }
+
+    public function add() {
+
+        // POSTメソッドの確認
+        // if ($_SERVER['REQUEST_METHOD'] === 'POST')と同じ
+        if ($this->request->is('post')) {
+
+            // 保存処理
+            // if文も追加
+            if ($this->Post->save($this->request->data)) {
+                // 保存に成功
+
+                // フラッシュメッセージ（リダイレクトした直後にのみ表示される）
+                $this->Flash->success('新しい記事を追加しました!');
+
+                // リダイレクト
+                return $this->redirect(array('action' => 'index'));
+            } else {
+                // 保存に失敗
+                return $this->Flash->error('保存できませんでした...');
+            }
+
+
+        }
     }
 }
